@@ -20,7 +20,7 @@ Para obtener más información, consulte el siguiente artículo: J. McAuley and 
 
 ### Presentación de resultados
 
--	Gráfica comparativa de los tiempos de ejecución entre un algoritmo secuencial y algoritmo paralelo
+-	Gráfica comparativa de los tiempos de ejecución entre un algoritmo secuencial, paralelo y MPI
 
 ![24JPA](https://github.com/Juancarlos56/Practica01-Desarrollo-Computo-Paralelo-Con-Procesos/blob/main/imagenes/comparativa.png)
 
