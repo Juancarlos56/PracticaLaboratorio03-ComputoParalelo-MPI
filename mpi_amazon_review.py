@@ -12,11 +12,12 @@
 def cargaDataSet(path, nameColumns):
     df = pd.read_csv(path, encoding='utf-8', sep=',', low_memory=False, header=None, names=nameColumns)
     #Obtencion de muestra del dataset de manera randomica para generacion de grafica. 
+    #df = df.sample(frac=0.90, random_state=10)
     #df = df.sample(frac=0.75, random_state=10)
     #df = df.sample(frac=0.50, random_state=10)
     #df = df.sample(frac=0.25, random_state=10)
     #df = df.sample(frac=0.10, random_state=10)
-    df = df.sample(frac=0.05, random_state=10)
+    #df = df.sample(frac=0.05, random_state=10)
     
     #Elimnacion de filas que contienen campos vacios.
     df = df.dropna()
