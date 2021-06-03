@@ -95,16 +95,17 @@ stop =stopwords.words("english")
 #Funcion principal del programa
 if __name__ == "__main__":
 
-    
-    
-
-    #Toma de tiempo
+    #Con esto apagamos los mensajes de warning de pandas 
     pd.options.mode.chained_assignment = None
-    start_time = time.time()
+    #El comunicador define un grupo de procesos que pueden comunicarse entre sí.
     comm=MPI.COMM_WORLD
+    #La identificación de un proceso se basa en rangos. A cada proceso se le 
+    #asigna un rango para cada comunicador al que pertenece
     rank = comm.rank
+
     #print("\n***********************MPI",rank,"***************************")
 
+    #Definicion del proceso con un rango global de 0 como el proceso maestro
     if rank==0:
         #Descarga de stopwords
         nltk.download('stopwords')
@@ -130,34 +131,47 @@ if __name__ == "__main__":
         
         #Llamada a funcion de carga de dataset, paso de path y nombre de columnas
         data = cargaDataSet('amazon_review_full_csv/train.csv', ['score', 'review', 'reviewText'])
+        #Creacion de lista de la cantidad de procesos que se van a realizar
         destination_process = [1,2,3,4,5]
+
+        #Recorrido de la lista mediante for para envio de mensajes
         for i in destination_process:
+            #Envio de parametros para los destinatarios 
+            #Envio de dataset para cada procesador
             comm.send(data,dest=i)
-    
+
+    #Destino identificado como numero 1
     if rank==1:
+        #Se recibe el mensaje enviado desde rank=0, almacenamos en data
         data=comm.recv(source=0)
         #Separacion de los distintos puntajes que posee la columna score del 1-5
         df_grupo1 = separacionDataSet(data, 'score', 1)
+        #LLamada para obtener palabras
         obtenerValoresPorGrupos(df_grupo1, ("Dataset Grupo 1"))
 
+    #Destino identificado como numero 2
     if rank==2:
+        
         data=comm.recv(source=0)
         #Separacion de los distintos puntajes que posee la columna score del 1-5
         df_grupo2 = separacionDataSet(data, 'score', 2)
         obtenerValoresPorGrupos(df_grupo2, ("Dataset Grupo 2"))
-        
+
+    #Destino identificado como numero 3  
     if rank==3:
         data=comm.recv(source=0)
         #Separacion de los distintos puntajes que posee la columna score del 1-5
         df_grupo3 = separacionDataSet(data, 'score', 3)
         obtenerValoresPorGrupos(df_grupo3, ("Dataset Grupo 3"))
     
+    #Destino identificado como numero 4
     if rank==4:
         data=comm.recv(source=0)
         #Separacion de los distintos puntajes que posee la columna score del 1-5
         df_grupo4 = separacionDataSet(data, 'score', 4)
         obtenerValoresPorGrupos(df_grupo4, ("Dataset Grupo 4"))
 
+    #Destino identificado como numero 5
     if rank==5:
         data=comm.recv(source=0)
         #Separacion de los distintos puntajes que posee la columna score del 1-5
